@@ -51,8 +51,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
     'accounts',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -63,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -70,7 +78,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -144,6 +152,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',           # для admin
+    'allauth.account.auth_backends.AuthenticationBackend', # allauth
+]
+
 
 # Django REST Framework settings
 # https://www.django-rest-framework.org/api-guide/settings/
@@ -155,7 +168,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ],
+    'TOKEN_MODEL': None,
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer'
 }
+
+REST_USE_JWT = True
+
+REST_AUTH_REGISTER_SERIALIZER = 'accounts.serializers.CustomRegisterSerializer'
 
 
 # JWT settings
@@ -200,3 +219,28 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+FRONTEND_URL = os.getenv(
+    'FRONTEND_URL', 'http://localhost:3000'
+)
+
+ACCOUNT_ADAPTER = 'accounts.adapter.FrontendAccountAdapter'
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+ACCOUNT_SIGNUP_FIELDS = ['username*', 'email*', 'first_name*']
+ACCOUNT_UNIQUE_EMAIL          = True
+ACCOUNT_EMAIL_VERIFICATION    = 'mandatory'
+ACCOUNT_LOGIN_METHODS = {'username', 'email'}
+
+# Куда вести после клика по ссылке подтверждения (ваш фронт)
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = FRONTEND_URL + '/login'
+
+# SMTP-настройки
+EMAIL_BACKEND      = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST         = os.getenv('SMTP_HOST')
+EMAIL_PORT         = int(os.getenv('SMTP_PORT', 587))
+EMAIL_HOST_USER    = os.getenv('SMTP_USER')
+EMAIL_HOST_PASSWORD= os.getenv('SMTP_PASSWORD')
+EMAIL_USE_TLS      = os.getenv('SMTP_TLS', 'True') == 'True'
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'no-reply@example.com')
