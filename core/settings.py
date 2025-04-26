@@ -169,7 +169,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ],
     'TOKEN_MODEL': None,
-    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer'
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+    'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserProfileSerializer',
 }
 
 REST_USE_JWT = True

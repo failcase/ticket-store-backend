@@ -15,7 +15,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'first_name', 'last_name')
+        fields = ('username', 'email', 'first_name', 'last_name', 'avatar')
         read_only_fields = ('username',)
 
 class CustomRegisterSerializer(RegisterSerializer):

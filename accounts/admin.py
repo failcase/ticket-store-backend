@@ -12,3 +12,12 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('username', 'email')
     list_filter = ('is_staff', 'is_active')
     ordering = ('username',)
+    fieldsets = (
+        *UserAdmin.fieldsets,
+        (
+            'Custom Fields',
+            {
+                'fields': ('avatar',),
+            },
+        ),
+    )
