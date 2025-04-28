@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_filters',
     'corsheaders',
     'allauth',
     'allauth.account',
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'accounts',
+    'organizations',
 ]
 
 SITE_ID = 1
@@ -171,7 +173,10 @@ REST_FRAMEWORK = {
     'TOKEN_MODEL': None,
     'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserProfileSerializer',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
+
+APPEND_SLASH = False
 
 REST_USE_JWT = True
 

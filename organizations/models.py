@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 
 
 class Organization(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=64, unique=True)
     slug = models.SlugField(default="", null=False, blank=False, unique=True, db_index=True)
     description = models.TextField(blank=True, null=True)
     logo = ResizedImageField(size=[512, 512], crop=['middle', 'center'], force_format='JPEG', quality=90, blank=True, null=True)
@@ -21,6 +21,6 @@ class Organization(models.Model):
         return reverse('organizations:organization_detail', args=[self.slug])
 
     def save(self, *args, **kwargs):
-        if not self.slug:
+        if not self.slug or self.slug == "":
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)

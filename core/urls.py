@@ -21,9 +21,16 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
 
+from organizations.views import OrganizationViewSet
 from accounts.views import CustomTokenObtainPairView, UserProfileView
 from core import settings
+
+
+router = DefaultRouter(trailing_slash=False)
+router.register('org', OrganizationViewSet, basename="organizations")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,4 +41,5 @@ urlpatterns = [
     path('api/token/verify', TokenVerifyView.as_view(), name='token_verify'),
 
     path('api/users/<str:username>', UserProfileView.as_view(), name='user-profile'),
+    path('api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
