@@ -20,7 +20,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
-from django.views.static import serve
+from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
 from organizations.views import OrganizationViewSet
@@ -42,4 +42,8 @@ urlpatterns = [
 
     path('api/users/<str:username>', UserProfileView.as_view(), name='user-profile'),
     path('api/', include(router.urls)),
-] + path(settings.MEDIA_URL, serve, {'document_root': settings.MEDIA_ROOT}),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
