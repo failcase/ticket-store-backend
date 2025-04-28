@@ -3,6 +3,8 @@
 
 .git/
 .gitignore
+README.md
+LICENSE
 
 .env
 *.sqlite3
@@ -11,3 +13,7 @@ staticfiles/
 
 venv/
 __pycache__/
+
+Dockerfile
+compose.yml
+docker-extra/

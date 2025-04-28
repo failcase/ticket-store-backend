@@ -9,15 +9,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   ticket-store-backend:
-    image: failcase/ticket-store-backend:latest
+    image: failcase/ticket-store-backend:770ec66
     restart: unless-stopped
     env_file:
       - ${ENV_FILE:-.env}
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
     volumes:
-      - staticfiles:/home/django/staticfiles
+      - media:/home/django/media:rw
+      - staticfiles:/home/django/staticfiles:rw
 
 volumes:
   postgres_data:
+  media:
   staticfiles:
 
 networks:
