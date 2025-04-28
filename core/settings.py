@@ -151,10 +151,6 @@ STORAGES = {
     },
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
-        "OPTIONS": {
-            "location": os.path.join(BASE_DIR, "media"),
-            "base_url": "/media/",
-        },
     },
 }
 
@@ -196,8 +192,6 @@ REST_FRAMEWORK = {
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserProfileSerializer',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
-
-APPEND_SLASH = False
 
 REST_USE_JWT = True
 
