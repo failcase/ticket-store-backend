@@ -9,7 +9,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   ticket-store-backend:
-    image: failcase/ticket-store-backend:770ec66
+    image: failcase/ticket-store-backend:58f0d30
     restart: unless-stopped
     env_file:
       - ${ENV_FILE:-.env}
