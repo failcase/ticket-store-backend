@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:16-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  ticket-store-backend:
+    image: failcase/ticket-store-backend:latest
+    restart: unless-stopped
+    env_file:
+      - ${ENV_FILE:-.env}
+    volumes:
+      - staticfiles:/home/django/staticfiles
+
+volumes:
+  postgres_data:
+  staticfiles:
+
+networks:
+  default:
+    external: true
+    name: ${NPM_NETWORK_NAME:-frontend}
