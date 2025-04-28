@@ -1,5 +1,7 @@
 from rest_framework import viewsets, permissions
 import django_filters
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from organizations.models import Organization
 from organizations.serializers import OrganizationSerializer
@@ -43,6 +45,12 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         to the current user.
         """
         serializer.save(owner=self.request.user)
+
+    @action(detail=False)
+    def top_10(self, request):
+        organizations = Organization.objects.order_by('?')[:10]
+        serializer = self.get_serializer(organizations, many=True)
+        return Response(serializer.data)
 
 
 class IsOwner(permissions.BasePermission):
